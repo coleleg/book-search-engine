@@ -17,4 +17,4 @@ query me {
             link
         }
     }
-}`
+}`;
