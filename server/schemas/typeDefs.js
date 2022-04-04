@@ -12,7 +12,7 @@ scalar Date
     } 
 
     type Book {
-        bookId: ID
+        bookId: String
         authors: [String]
         description: String
         title: String
@@ -29,11 +29,20 @@ scalar Date
         me: User
     }
 
+    input savedBook {
+        authors: [String]
+        title: String
+        description: String
+        bookId: String
+        image: String
+        link: String
+    }
+
     type Mutation {
         login(email: String!, password: String!): Auth
         addUser(username: String!, email: String!, password: String!): Auth
-        saveBook(bookId: ID!): User
-        removeBook(bookId: ID!): User
+        saveBook(input: savedBook): User
+        removeBook(bookId: String!): User
     }
 `
 

@@ -44,23 +44,26 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, { input }, context) => {
             const currentUser = await User.findOne({ _id: context.user._id });
             if (currentUser) {
-                return User.findByIdAndUpdate(
-                    { _id: currentUser._id },
-                    { $push: { savedBooks: args.bookId } },
-                    { new: true }
-                )
+                return await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $addToSet: { savedBooks: input } },
+                    { new: true, runValidators: true }
+                );
             }
-            throw new AuthenticationError('You need to be logged in!');
+            throw new AuthenticationError("You need to be logged in!");
         },
 
-        removeBook: async (parent, args, context) => {
+        removeBook: async (parent, {bookId}, context) => {
             const currentUser = await User.findOne({ _id: context.user._id });
             if (currentUser) {
-            const book = await Book.findOneAndDelete({ bookId: args.bookId });
-            return book;
+                return await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { new: true }
+                );
             }
             throw new AuthenticationError('You need to be logged in!');
         }
