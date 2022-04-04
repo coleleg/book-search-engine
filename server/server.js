@@ -25,6 +25,10 @@ startServer();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
+});
+
 db.once('open', () => {
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);
